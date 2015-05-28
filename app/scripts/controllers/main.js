@@ -8,16 +8,19 @@
  * Controller of the yoAngularApp
  */
 angular.module('todosApp')
-  .controller('MainCtrl', function ($scope) {
-    $scope.todo = '';
-    $scope.todos = ['Item 1', 'Item 2', 'Item 3'];
+  .controller('MainCtrl', ['$scope','localStorageService', function ($scope, localStorageService) {
+
+    var savedTodos = localStorageService.get('todos');
+    $scope.todos = savedTodos || [];
 
     $scope.addTodo = function () {
       $scope.todos.push($scope.todo);
+      localStorageService.set('todos', $scope.todos);
       $scope.todo = '';
     };
 
     $scope.removeTodo = function(index) {
       $scope.todos.splice(index, 1);
+      localStorageService.set('todos', $scope.todos);
     }
-  });
+  }]);
